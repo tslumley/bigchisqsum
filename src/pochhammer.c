@@ -2,7 +2,7 @@
     vectorised on second argument
 */
 
-void pochhammer(int *x, int n[], int *length, int answer[]){
+void pochhammer(int *x, int n[], int *length, double answer[]){
   int i,j;
   
   for(j=0; j< *length; j++){
