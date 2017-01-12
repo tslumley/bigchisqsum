@@ -98,7 +98,9 @@ setMethod("*", c("numeric","gammaconv"), function(e1,e2) {
 })
 
 pochhammer1<-function(x,n) prod(x-1+seq_len(n))
-pochhammer<-Vectorize(pochhammer1)
+pochhammerR<-Vectorize(pochhammer1)
+
+pochhammer<-function(x,n) .C("pochhammer",as.integer(x), as.integer(n), as.integer(length(n)), integer(length(n)))[[4]]
 
 oneFone<-function(r,s, multiplier){
     if(!isWholeNumber(r)) stop("r must be an integer")
