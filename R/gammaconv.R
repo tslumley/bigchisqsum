@@ -44,8 +44,9 @@ BesselError<-function(N,a,b) {
 
 OptM<-function(a,b,xmax,epsilon,memo=NA){
 	lambda<-(a-b)/(4*a*b)
-	N1<-if(is.na(memo)) 10*abs(log10(epsilon)) else memo
-	N0<-5
+	N0<-if(is.na(memo)) 5 else memo
+	N1<-5+max(N0,10*abs(log10(epsilon)))
+
 	lowError <-integrate(BesselError(N0,a,b),lower=0,upper=xmax)$value
 	if (abs(lowError)<epsilon) 
 	    return(N0)
@@ -129,23 +130,33 @@ convone<-function(a,n, b,m){
     new("gammaconv",coef=confluent@coef*front, power=confluent@power+m+n+1,exp=confluent@exp+a)
 }
 
-setMethod("%*%", c("gammaconv","gammaconv"), function(x,y) {
+setMethod("nrow","gammaconv",function(x) length(x@coef))
 
-    allcoef<-numeric(0)
-    allpower<-integer(0)
-    allexp<-numeric(0)
+setMethod("%*%", c("gammaconv","gammaconv"), function(x,y) {
+ 
+
+    maxterms<-sum(outer(x@power,y@power,function(n1,n2) 2*pmax(n1+1,n2+1)))
+    allcoef<-numeric(maxterms)
+    allpower<-integer(maxterms)
+    allexp<-numeric(maxterms)
+    here<-0
     
     for(i in 1:length(x@power)){
         for(j in 1:length(y@power)){
             if (x@exp[i]==y@exp[j]) {cat("#");next}
+            
             term<-convone(x@exp[i],x@power[i],y@exp[j],y@power[j])
-            allcoef<-c(allcoef,term@coef*x@coef[i]*y@coef[j])
-            allpower<-c(allpower,term@power)
-            allexp<-c(allexp,term@exp)
+            size<-nrow(term)
+            
+            if(here+size>maxterms) stop("thomas can't count")
+            allcoef[here+(1:size)]<-term@coef*x@coef[i]*y@coef[j]
+            allpower[here+(1:size)]<-term@power
+            allexp[here+(1:size)]<-term@exp
+            here<-here+size
         }
     }
     
-    new("gammaconv", coef=allcoef,power=allpower,exp=allexp)
+    new("gammaconv", coef=allcoef[1:here],power=allpower[1:here],exp=allexp[1:here])
 })
 
 
