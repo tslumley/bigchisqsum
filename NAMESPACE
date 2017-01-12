@@ -1,0 +1,6 @@
+importFrom("stats", "pgamma","integrate")
+export(elgamma,chisqtwo,OptM,stcoef,sttail, evaldensity,evaltail,
+  BesselExpand, BesselError,pochhammer,oneFone,convone, simplify)
+exportMethods("show","as.data.frame","%*%","*","+","[")
+exportClasses("gammaconv")
+
