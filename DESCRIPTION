@@ -3,7 +3,7 @@ Title: Computing Linear Combinations of Many Chi-squareds
 Version: 0.1
 Author: Thomas Lumley
 Description:  Methods for computing large convolutions of Gamma or Chi-squared random variables
-Imports: Matrix, methods
+Imports: Matrix, methods, Rmpfr
 License: GPL (>= 2)
 Maintainer: Thomas Lumley <t.lumley@auckland.ac.nz>
 

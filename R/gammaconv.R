@@ -1,4 +1,4 @@
-##
+## package
 ## convolution algebra for chisquare convolutions, from https://arxiv.org/pdf/1208.2691v3.pdf
 ##
 
@@ -100,7 +100,8 @@ setMethod("*", c("numeric","gammaconv"), function(e1,e2) {
 pochhammer1<-function(x,n) prod(x-1+seq_len(n))
 pochhammerR<-Vectorize(pochhammer1)
 
-pochhammer<-function(x,n) .C("pochhammer",as.integer(x), as.integer(n), as.integer(length(n)), integer(length(n)))[[4]]
+## needs to return double because it could be bigger than 2^31
+pochhammer<-function(x,n) .C("pochhammer",as.integer(x), as.integer(n), as.integer(length(n)), double(length(n)))[[4]]
 
 oneFone<-function(r,s, multiplier){
     if(!isWholeNumber(r)) stop("r must be an integer")
@@ -170,6 +171,16 @@ simplify<-function(object){
 
 }
 
+simplifymp<-function(object){
+    i<-paste(object@exp,object@power)
+    u<-!duplicated(i)
+    i<-factor(i,levels=unique(i))
+    mpcoef<-mpfr(object@coef,120)
+    #c<-rowsum(object@coef,i,reorder=FALSE)
+    c<-tapply(mpcoef,i,function(x) asNumeric(sum(x)))
+    new("gammaconv",coef=as.vector(c), exp=object@exp[u],power=object@power[u])
+
+}
           
 
 evaldensity<-function(object,x){
