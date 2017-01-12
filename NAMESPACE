@@ -1,7 +1,8 @@
 useDynLib("bigchisqsum")
+importMethodsFrom("Matrix","%*%")
 importFrom("stats", "pgamma","integrate")
 export(elgamma,chisqtwo,OptM,stcoef,sttail, evaldensity,evaltail,
   BesselExpand, BesselError,pochhammer,oneFone,convone, simplify)
-exportMethods("show","as.data.frame","%*%","*","+","[")
+exportMethods("show","as.data.frame","%*%","*","[")
 exportClasses("gammaconv")
 
