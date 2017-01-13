@@ -163,6 +163,23 @@ setMethod("%*%", c("gammaconv","gammaconv"), function(x,y) {
 })
 
 
+
+rowsum_kahan <- function(x,group){
+    if(length(x)!=length(group)) stop("length mismatch")
+    if (!is.double(x)) x<-as.double(x)
+    rval<-.C("rowsum_kahan", len=as.integer(length(x)), x=x, as.numeric(as.factor(group)))
+    rval$x[seq_len(rval$len)]
+}
+
+
+
+simplify_kahan<-function(object){
+    i<-paste(object@exp,object@power)
+    u<-!duplicated(i)
+    c<-rowsum_kahan(object@coef,i)
+    new("gammaconv",coef=as.vector(c), exp=object@exp[u],power=object@power[u])
+}
+
 simplify<-function(object){
     i<-paste(object@exp,object@power)
     u<-!duplicated(i)
