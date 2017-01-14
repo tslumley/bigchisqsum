@@ -4,7 +4,10 @@ import("Rmpfr")
 importFrom("stats", "pgamma","integrate")
 export(elgamma,chisqtwo,OptM,stcoef,sttail, evaldensity,evaltail,
   BesselExpand, BesselError,pochhammer,oneFone,convone, simplify,
-  simplifymp,rowsum_kahan,simplify_kahan)
-exportMethods("show","as.data.frame","%*%","*","[")
+  rowsum_kahan,simplify_kahan,
+  elgammamp,chisqtwomp,stcoefmp,sttailmp, evaldensitymp,evaltailmp,
+  oneFonemp,convonemp,
+  simplifymp)
+exportMethods("show","as.data.frame","%*%","*","[","nrow")
 exportClasses("gammaconv")
 

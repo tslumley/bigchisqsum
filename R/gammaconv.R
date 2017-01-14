@@ -18,7 +18,7 @@ elgamma<-function(alpha,beta){
     if ((length(alpha)!=1) || (length(beta)!=1)) stop("only one term allowed")
     if (!isWholeNumber(alpha)) stop("alpha must be an integer")
 
-    new("gammaconv", coef=beta^alpha/gamma(alpha), exp = -beta, power=alpha-1)
+    new("gammaconv", coef=beta^alpha/gamma(alpha), exp = -beta, power=as.integer(alpha-1))
 }
 
 
@@ -188,16 +188,6 @@ simplify<-function(object){
 
 }
 
-simplifymp<-function(object){
-    i<-paste(object@exp,object@power)
-    u<-!duplicated(i)
-    i<-factor(i,levels=unique(i))
-    mpcoef<-mpfr(object@coef,120)
-    #c<-rowsum(object@coef,i,reorder=FALSE)
-    c<-tapply(mpcoef,i,function(x) asNumeric(sum(x)))
-    new("gammaconv",coef=as.vector(c), exp=object@exp[u],power=object@power[u])
-
-}
           
 
 evaldensity<-function(object,x){
