@@ -5,7 +5,7 @@ importFrom("stats", "pgamma","integrate")
 export(elgamma,chisqtwo,OptM,stcoef,sttail, evaldensity,evaltail,
   BesselExpand, BesselError,pochhammer,oneFone,convone, simplify,
   rowsum_kahan,simplify_kahan,
-  elgammamp,chisqtwomp,stcoefmp,sttailmp, evaldensitymp,evaltailmp,
+  elgammamp,chisqtwomp,
   oneFonemp,convonemp,
   simplifymp)
 exportMethods("show","as.data.frame","%*%","*","[","nrow")

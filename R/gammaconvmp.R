@@ -1,5 +1,5 @@
 
-PRECISION<-100
+PRECISION<-50
 
 setClass("gammaconvmp", slots=c(coef="mpfr",exp="mpfr",power="integer"))
 
@@ -111,32 +111,17 @@ simplifymp<-function(object){
     i<-factor(i,levels=unique(i))
     c<-mpfr(rep(0,sum(u)),PRECISION)
     for(j in 1:sum(u)){
-      c[i]<-sum(object@coef[i==ul[j]])
+      c[j]<-sum(object@coef[i==ul[j]])
     }
     new("gammaconvmp",coef=c, exp=object@exp[u],power=object@power[u])
 
 }
 
-                  
-
-evaldensitymp<-function(object,x){
-    if (length(x)==1)
-        asNumeric(sum(object@coef*exp(object@exp*x)*x^(object@power)))
-    else{
-        e<-exp(outer(object@exp,x))
-        p<-outer(object@power,x, function(a,b) b^a)
-        asNumeric(colSums(e*p*object@coef))
-    }
-}
-
-
-stcoefmp<- function(obj) {
-    a<-obj@power+1
-    asNumeric(obj@coef*gamma(a)/(-obj@exp)^(obj@power+1))
-}
+                
 
 setMethod("as.data.frame","gammaconvmp",
-          function(x) data.frame(coef=asNumeric(x@coef),exp=asNumeric(x@exp),power=asNumeric(x@power),stcoef=stcoefmp(x))
+          function(x) data.frame(coef=asNumeric(x@coef),exp=asNumeric(x@exp),
+                                 power=asNumeric(x@power),stcoef=asNumeric(stcoefmp(x)))
           )
 
 
@@ -145,27 +130,6 @@ setMethod("[",c("gammaconvmp","index","ANY","ANY"),
 	)
 
 
-
-	
-sttailmp<- function(obj,x) {
-    a<-obj@power+1
-    b<- -obj@exp
-    asNumeric(pgamma(x,a,b,lower=FALSE)*stcoef(obj))
-}
-
-
-evaltailmp<-function(object,x){
-    s<-stcoef(object)
-    if (length(x)==1)
-        asNumeric(sum(sttail(object,x)))
-    else{
-    	  a<-object@power+1
-   	  b<- -object@exp
-   	  n<-length(a)
-       p<-outer(1:n,x,function(j,xi) pgamma(xi,a[j],b[j],lower=FALSE))
-       asNumeric(colSums(p*stcoef(object)))
-    }
-}
 
 
 

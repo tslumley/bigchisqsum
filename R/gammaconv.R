@@ -192,11 +192,11 @@ simplify<-function(object){
 
 evaldensity<-function(object,x){
     if (length(x)==1)
-        sum(object@coef*exp(object@exp*x)*x^(object@power))
+        asNumeric(sum(object@coef*exp(object@exp*x)*x^(object@power)))
     else{
         e<-exp(outer(object@exp,x))
         p<-outer(object@power,x, function(a,b) b^a)
-        colSums(e*p*object@coef)
+        asNumeric(colSums(e*p*object@coef))
     }
 }
 
@@ -226,13 +226,13 @@ sttail<- function(obj,x) {
 evaltail<-function(object,x){
     s<-stcoef(object)
     if (length(x)==1)
-        sum(sttail(object,x))
+        asNumeric(sum(sttail(object,x)))
     else{
     	  a<-object@power+1
    	  b<- -object@exp
    	  n<-length(a)
        p<-outer(1:n,x,function(j,xi) pgamma(xi,a[j],b[j],lower=FALSE))
-       colSums(p*stcoef(object))
+       asNumeric(colSums(p*stcoef(object)))
     }
 }
 
