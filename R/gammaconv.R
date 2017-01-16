@@ -218,7 +218,7 @@ setMethod("[",c("gammaconv","index","ANY","ANY"),
 	
 sttail<- function(obj,x) {
     a<-obj@power+1
-    b<- -obj@exp
+    b<- -asNumeric(obj@exp)
     pgamma(x,a,b,lower=FALSE)*stcoef(obj)
 }
 
@@ -229,7 +229,7 @@ evaltail<-function(object,x){
         asNumeric(sum(sttail(object,x)))
     else{
     	  a<-object@power+1
-   	  b<- -object@exp
+   	  b<- -asNumeric(object@exp)
    	  n<-length(a)
        p<-outer(1:n,x,function(j,xi) pgamma(xi,a[j],b[j],lower=FALSE))
        asNumeric(colSums(p*stcoef(object)))
